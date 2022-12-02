@@ -1,0 +1,9 @@
+*.DS_Store
+venv
+postgresdb
+.pytest_cache
+lib/tests/data/*
+*.pyc
+.idea*
+*.dmp
+lib/tests/data

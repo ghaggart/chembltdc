@@ -1,0 +1,48 @@
+version: '3.8'
+services:
+    postgres:
+        image: postgres:13.1
+        healthcheck:
+            test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres" ]
+            timeout: 45s
+            interval: 10s
+            retries: 10
+        env_file:
+            - .env
+        restart: on-failure
+        volumes:
+            - ./postgresdb:/var/lib/postgresql/data
+        stdin_open: true
+        tty: true
+        ports:
+            - "5434:5432"
+
+    api:
+        image: python:3.8-slim-buster
+        entrypoint: /opt/entrypoint.sh
+        restart: on-failure
+        depends_on:
+            postgres:
+                condition: service_healthy
+        env_file:
+            - .env
+        volumes:
+            - ./api:/opt/api
+            - ./lib:/opt/lib
+            - ./docker/api/entrypoint.sh:/opt/entrypoint.sh
+            - ./requirements.txt:/opt/requirements.txt
+        ports:
+            - "5001:5000"
+
+    nginx:
+        container_name: nginx
+        hostname: reverse
+        image: nginx
+        depends_on:
+            - "postgres"
+            - "api"
+        ports:
+            - 80:80
+        volumes:
+            - ./postgres/nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./postgres/nginx/chembltdc.conf:/etc/nginx/conf.d/chembltdc.conf
