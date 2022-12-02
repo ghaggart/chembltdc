@@ -1,6 +1,6 @@
 # An integrated ChEMBL/TDC database, plus a REST API for accessing.
 
-Copyright 2022 Gordon Andrew Haggart
+Copyright 2022 Gordon Andrew Haggart - All rights reserved
 
 This is an incomplete approach to integrating ChEMBL and the Therapeutic Data Commons database. Licence is under the GNU/GPLv3 licence, meaning it cannot be distributed in closed-source applications. 
 
